@@ -1,0 +1,16 @@
+./node_modules
+.DS_Store
+.env
+dist
+build
+.vscode
+npm-debug.log
+./nginx-certs
+nginx-certs/*.pem
+nginx-certs/*.key
+nginx-certs/*.crt
+nginx-certs/*-key.pem
+logs
+node_modules
+*.log
+node_modules/*
