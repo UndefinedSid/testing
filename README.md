@@ -1,84 +1,83 @@
-Simple Static Website with Docker Compose
-This project demonstrates how to containerize a simple static HTML website and run three instances using Docker Compose.
 
-Project Structure
-text
-.
-├── index.html          # Main HTML file
-├── Dockerfile          # Docker image configuration
-├── docker-compose.yml  # Docker Compose configuration
-└── README.md           # This file
-Prerequisites
-Docker installed on your system
+# Simple Static Website (Docker Compose)
 
-Docker Compose installed on your system
+A minimal project demonstrating how to run a simple static website (and a small Node server) locally and with Docker Compose.
 
-Files
-index.html
-A simple static HTML webpage that displays a welcome message.
+**Project Structure**
+- **`index.html`**: Main static HTML page served by the app.
+- **`Dockerfile`**: Image build instructions.
+- **`docker-compose.yml`**: Compose setup launching multiple app instances.
+- **`server.js`**: Optional Node/Express server (used for local dev or custom behavior).
+- **`package.json`**: Node dependencies and metadata.
+- **`nginx-certs/`**: (Optional) SSL certs for nginx if used.
 
-Dockerfile
-dockerfile
-FROM nginx:alpine
-COPY index.html /usr/share/nginx/html/index.html
-EXPOSE 80
-docker-compose.yml
-yaml
-version: "3.9"
-services:
-  app1:
-    build: .
-    environment:
-      - APP_NAME=APP1
-    ports:
-      - "3001:3000"
-  app2:
-    build: .
-    environment:
-      - APP_NAME=APP2
-    ports:
-      - "3002:3000"
-  app3:
-    build: .
-    environment:
-      - APP_NAME=APP3
-    ports:
-      - "3003:3000"
-Running the Application
-To start all three containers, run:
+**Prerequisites**
+- **`Docker`**: Install from https://docs.docker.com/get-docker/.
+- **`Docker Compose`**: Included with modern Docker Desktop; otherwise install separately.
+- **`Node.js` (optional)**: For local development with `server.js` (run `npm install`).
 
-bash
-docker-compose up -d
-Accessing the Websites
-After running the containers, you can access them at:
+**Quick Start (Docker Compose)**
+1. Build and start the services (uses the Compose v2 CLI):
 
-App 1: http://localhost:3001
+```bash
+docker compose up --build
+```
 
-App 2: http://localhost:3002
+2. Or run in detached mode:
 
-App 3: http://localhost:3003
+```bash
+docker compose up --build -d
+```
 
-Managing Containers
-View running containers
-bash
-docker-compose ps
-Stop all containers
-bash
-docker-compose down
-View logs
-bash
-docker-compose logs
-Restart containers
-bash
-docker-compose restart
-Notes
-Each container runs the same application but with different APP_NAME environment variables
+3. Open the instances in your browser:
 
-The nginx web server serves the static HTML file on port 3000 inside each container
+- `http://localhost:3001`
+- `http://localhost:3002`
+- `http://localhost:3003`
 
-Different host ports (3001, 3002, 3003) are mapped to each container's port 3000
+**Local Development (without Docker)**
+1. Install dependencies:
 
-The alpine version of nginx is used for a smaller image size
+```bash
+npm install
+```
 
+2. Start the app using the bundled Node server:
+
+```bash
+node server.js
+```
+
+If you prefer a script-based start, add a `start` script to `package.json` and run `npm start`.
+
+**Docker / Image Notes**
+- Each container serves the same app but with different environment variables (e.g., `APP_NAME`) so you can run multiple instances.
+- The container listens on port `3000` internally; Compose maps it to host ports `3001`, `3002`, `3003`.
+- The `Dockerfile` uses a small base (e.g., `nginx:alpine`) to keep image size minimal.
+
+**Useful Commands**
+- **List running services**: `docker compose ps`
+- **View logs**: `docker compose logs` or `docker compose logs -f`
+- **Stop and remove**: `docker compose down`
+- **Restart services**: `docker compose restart`
+
+**Configuration**
+- Edit `docker-compose.yml` to change ports, scale services, or add environment variables.
+- Place TLS/SSL material (if used) under `nginx-certs/` and adjust the nginx configuration accordingly.
+
+**Notes**
+- This repository contains both a static `index.html` and a small optional Node server in `server.js` for demonstration.
+- `package.json` currently does not include a `start` script; run `node server.js` after `npm install`.
+
+**License & Contact**
+- **License**: ISC (see `package.json`) — change as needed.
+- **Maintainer**: Update `package.json` author or contact me directly if you want me to commit these changes.
+
+---
+
+If you'd like, I can:
+- create a `start` script in `package.json`,
+- add a small `Makefile` or npm scripts for common tasks, or
+- commit these README changes and open a PR. Which would you prefer?
 This setup demonstrates running multiple instances of the same application with different configurations using Docker Compose.
 
